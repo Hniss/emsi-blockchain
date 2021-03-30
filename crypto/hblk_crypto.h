@@ -5,6 +5,14 @@
 #include <openssl/obj_mac.h>
 #include <openssl/objects.h>
 #include <openssl/bn.h>
+#include <string.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <openssl/evp.h>
+#include <openssl/pem.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+
 
 /*#define ECCTYPE "secp256r1"*/
 #define EC_CURVE NID_secp256k1
@@ -33,3 +41,5 @@ EC_KEY *ec_create(void);
 uint8_t *ec_to_pub(EC_KEY const *key, uint8_t pub[EC_PUB_LEN]);
 
 EC_KEY *ec_from_pub(uint8_t const pub[EC_PUB_LEN]);
+
+int ec_save(EC_KEY *key, char const *folder);
