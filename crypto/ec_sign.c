@@ -1,36 +1,30 @@
 #include "hblk_crypto.h"
 
 /**
- * ec_save - save existing EC key pair to disk
- * @key: EC key pair to save
- * @folder: path to folder to save keys
+ * ec_sign - sign a set of bytes, using given private EC_KEY
+ * @key: pointer to EC_KEY struct containing private key to perform the signing
+ * @msg: pointer to characters to be signed
+ * @msglen: len of msg
+ * @sig: address to store signature
  *
- * Return: 1 on success, 0 on error
+ * Return: pointer to signature buffer on success, NULL on error
  */
-int ec_save(EC_KEY *key, char const *folder)
+uint8_t *ec_sign(EC_KEY const *key, uint8_t const *msg, size_t msglen,
+		sig_t *sig)
 {
-	char buf[BUFSIZ];
-	FILE *fp;
+	unsigned char md[SHA256_DIGEST_LENGTH];
 
-	if (!key || !folder || strlen(folder) + strlen(PUB_FILENAME) > BUFSIZ)
-		return (0);
-	mkdir(folder, S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH);
-	sprintf(buf, "%s/%s", folder, PUB_FILENAME);
-	fp = fopen(buf, "w");
-	if (!fp)
-		return (0);
-	if (!PEM_write_EC_PUBKEY(fp, key))
-		goto out;
-	fclose(fp);
-	sprintf(buf, "%s/%s", folder, PRI_FILENAME);
-	fp = fopen(buf, "w");
-	if (!fp)
-		return (0);
-	if (!PEM_write_ECPrivateKey(fp, key, NULL, NULL, 0, NULL, NULL))
-		goto out;
-	fclose(fp);
-	return (1);
-out:
-	fclose(fp);
-	return (0);
+	if (!key || !msg || !sig)
+		return (NULL);
+	if (!EC_KEY_check_key(key))
+		return (NULL);
+	if (!SHA256(msg, msglen, md))
+		return (NULL);
+	sig->len = ECDSA_size(key);
+	if (!sig->len)
+		return (NULL);
+	if (!ECDSA_sign(EC_CURVE, md, SHA256_DIGEST_LENGTH, sig->sig,
+				(unsigned int *)&(sig->len), (EC_KEY *)key))
+		return (NULL);
+	return (sig->sig);
 }
