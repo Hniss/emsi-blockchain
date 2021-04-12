@@ -1,16 +1,11 @@
 CC = gcc
+CFLAGS = -Wall -Werror -Wextra -pedantic -std=gnu89 -g3
 
-CFLAGS = -Wall -Wextra -Werror -pedantic
-INCLUDES = -I.
+SRC = sha256.c ec_create.c ec_to_pub.c ec_from_pub.c ec_save.c ec_load.c ec_sign.c ec_verify.c
+OBJS = $(patsubst %.c, %.o, $(SRC))
+LIB = libhblk_crypto.a
 
-SRCS := $(wildcard *.c)
-OBJS := $(SRCS:.c=.o)
+.PHONY: libhblk_crypto.a
 
-%.o : %.c
-@echo "Creating object.."
-${CC} $(FLAGS) -c $< -o $@
-
-libhblk_crypto.a : $(OBJS)
-	@echo "Creating libhblk_crypto.a archive.."
-	ar r $@ $^
-
+libhblk_crypto.a: $(OBJS)
+ar rcs $(LIB) $(OBJS)
