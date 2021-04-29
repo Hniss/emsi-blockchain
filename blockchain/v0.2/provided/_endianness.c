@@ -1,4 +1,3 @@
-
 #include "endianness.h"
 
 /**

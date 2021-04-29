@@ -21,7 +21,7 @@
 #define MIN(x, y) ((x) < (y) ? (x) : (y))
 
 #define HBLK_MAGIC "HBLK"
-#define HBLK_VERSION "0.1"
+#define HBLK_VERSION "0.2"
 
 /**
  * struct blockchain_s - Blockchain structure
@@ -60,6 +60,8 @@ typedef struct block_info_s
 } block_info_t;
 
 #define BLOCKCHAIN_DATA_MAX 1024
+#define BLOCK_GENERATION_INTERVAL 1
+#define DIFFICULTY_ADJUSTMENT_INTERVAL 5
 
 /**
  * struct block_data_s - Block data
@@ -119,5 +121,10 @@ int blockchain_serialize(blockchain_t const *blockchain, char const *path);
 blockchain_t *blockchain_deserialize(char const *path);
 llist_t *deserialize_blocks(int fd, uint32_t size, uint8_t endianness);
 int block_is_valid(block_t const *block, block_t const *prev_block);
+
+int hash_matches_difficulty(uint8_t const hash[SHA256_DIGEST_LENGTH],
+	uint32_t difficulty);
+void block_mine(block_t *block);
+uint32_t blockchain_difficulty(blockchain_t const *blockchain);
 
 #endif

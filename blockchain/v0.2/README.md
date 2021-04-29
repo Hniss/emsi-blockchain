@@ -1,3 +1,2 @@
-BLOCKCHAIN V0.2
-BLOCK-MINING
+# 0x02. Blockchain - Block mining
 

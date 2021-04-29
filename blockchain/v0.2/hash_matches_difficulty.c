@@ -36,4 +36,3 @@ int hash_matches_difficulty(uint8_t const hash[SHA256_DIGEST_LENGTH],
 		return (0);
 	return (get_difficulty(hash) >= difficulty);
 }
-
