@@ -1,50 +1,36 @@
 #include "blockchain.h"
 
 /**
- * blockchain_create - allocate and initialize a new blockchain
+ * blockchain_create - Creates a Blockchain structure, and initializes it
  *
- * Return: If an error occurs, return NULL.
- * Otherwise, return a pointer the the new blockchain.
- */
+ * Return: pointer to the blockchain structure
+ **/
 blockchain_t *blockchain_create(void)
 {
-	blockchain_t *blockchain = calloc(1, sizeof(*blockchain));
+	blockchain_t *chain = calloc(1, sizeof(*chain));
 	block_t *block = calloc(1, sizeof(*block));
+	llist_t *list = llist_create(MT_SUPPORT_TRUE);
+	llist_t *unspent = llist_create(MT_SUPPORT_TRUE);
 
-	if (!blockchain || !block)
+	if (!chain || !block || !list || !unspent)
 	{
-		free(blockchain);
-		free(block);
+		free(chain), free(block), llist_destroy(list, 1, NULL),
+			llist_destroy(unspent, 1, NULL);
+		perror("memory allocation failed");
 		return (NULL);
 	}
-	blockchain->chain = llist_create(MT_SUPPORT_FALSE);
-	blockchain->unspent = llist_create(MT_SUPPORT_FALSE);
-	if (!blockchain->chain || !blockchain->unspent)
+	block->info.timestamp = GENESIS_TIMESTAMP;
+	memcpy(&(block->data.buffer), GENESIS_DATA, GENESIS_DATA_LEN);
+	block->data.len = GENESIS_DATA_LEN;
+	memcpy(&(block->hash), GENESIS_HASH, SHA256_DIGEST_LENGTH);
+	if (llist_add_node(list, block, ADD_NODE_FRONT))
 	{
-		free(blockchain);
-		free(block);
+		perror("failed to add node to the llist");
+		free(chain), free(block), llist_destroy(list, 1, NULL),
+			llist_destroy(unspent, 1, NULL);
 		return (NULL);
 	}
-	block->info.index = BLOCK_GENESIS_INIT_INFO_INDEX;
-	block->info.difficulty = BLOCK_GENESIS_INIT_INFO_DIFFICULTY;
-	block->info.timestamp = BLOCK_GENESIS_INIT_INFO_TIMESTAMP;
-	block->info.nonce = BLOCK_GENESIS_INIT_INFO_NONCE;
-	memcpy(
-		block->info.prev_hash,
-		BLOCK_GENESIS_INIT_INFO_PREV_HASH, SHA256_DIGEST_LENGTH);
-	memcpy(
-		block->data.buffer,
-		BLOCK_GENESIS_INIT_DATA_BUFFER, BLOCK_GENESIS_INIT_DATA_LEN);
-	block->data.len = BLOCK_GENESIS_INIT_DATA_LEN;
-	memcpy(
-		block->hash,
-		BLOCK_GENESIS_INIT_HASH, SHA256_DIGEST_LENGTH);
-	if (llist_add_node(blockchain->chain, block, ADD_NODE_FRONT) == -1)
-	{
-		llist_destroy(blockchain->chain, 1, NULL);
-		free(blockchain);
-		free(block);
-		return (NULL);
-	}
-	return (blockchain);
+	chain->chain = list;
+	chain->unspent = unspent;
+	return (chain);
 }

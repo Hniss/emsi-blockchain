@@ -22,15 +22,17 @@ transaction_t *coinbase_create(EC_KEY const *receiver, uint32_t block_index)
 	inputs = llist_create(MT_SUPPORT_FALSE);
 	outputs = llist_create(MT_SUPPORT_FALSE);
 	if (!tx || !txi || !txo || !inputs || !outputs ||
-		llist_add_node(inputs, txi, ADD_NODE_REAR) ||
-		llist_add_node(outputs, txo, ADD_NODE_REAR))
-		return (free(tx), free(txi), free(txo), llist_destroy(inputs, 0, NULL),
+	    llist_add_node(inputs, txi, ADD_NODE_REAR) ||
+	    llist_add_node(outputs, txo, ADD_NODE_REAR))
+		return (free(tx), free(txi), free(txo),
+			llist_destroy(inputs, 0, NULL),
 			llist_destroy(outputs, 0, NULL), NULL);
 	memcpy(txi->tx_out_hash, &block_index, 4);
 	tx->inputs = inputs;
 	tx->outputs = outputs;
 	if (!transaction_hash(tx, tx->id))
-		return (free(tx), free(txi), free(txo), llist_destroy(inputs, 0, NULL),
+		return (free(tx), free(txi), free(txo),
+			llist_destroy(inputs, 0, NULL),
 			llist_destroy(outputs, 0, NULL), NULL);
 	return (tx);
 }

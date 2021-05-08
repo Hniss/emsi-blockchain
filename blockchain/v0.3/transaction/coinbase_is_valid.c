@@ -26,18 +26,18 @@ int coinbase_is_valid(transaction_t const *coinbase, uint32_t block_index)
 	if (!coinbase)
 		return (0);
 	if (!transaction_hash(coinbase, hash) ||
-		memcmp(coinbase->id, hash, SHA256_DIGEST_LENGTH))
+	    memcmp(coinbase->id, hash, SHA256_DIGEST_LENGTH))
 		return (0);
 	if (llist_size(coinbase->inputs) != 1 ||
-		llist_size(coinbase->outputs) != 1)
+	    llist_size(coinbase->outputs) != 1)
 		return (0);
 	txi = llist_get_node_at(coinbase->inputs, 0);
 	txo = llist_get_node_at(coinbase->outputs, 0);
 	if (memcmp(txi->tx_out_hash, &block_index, 4))
 		return (0);
 	if (!is_empty(txi->block_hash, sizeof(txi->block_hash)) ||
-		!is_empty(txi->tx_id, sizeof(txi->tx_id)) ||
-		!is_empty((uint8_t *)&txi->sig, sizeof(txi->sig)))
+	    !is_empty(txi->tx_id, sizeof(txi->tx_id)) ||
+	    !is_empty((uint8_t *)&txi->sig, sizeof(txi->sig)))
 		return (0);
 	if (txo->amount != COINBASE_AMOUNT)
 		return (0);

@@ -18,7 +18,7 @@ void _print_hex_buffer(uint8_t const *buf, size_t len);
  * Return: 0
  */
 static int _print_unspent(unspent_tx_out_t const *unspent, unsigned int idx,
-	char const *indent)
+			  char const *indent)
 {
 	printf("%s{\n", indent);
 
@@ -67,7 +67,7 @@ static void _print_all_unspent(llist_t *unspent)
  * Return: A pointer to the created Block
  */
 static block_t *_add_block(blockchain_t *blockchain, block_t const *prev,
-	char const *data, EC_KEY *miner)
+			   char const *data, EC_KEY *miner)
 {
 	block_t *block;
 	transaction_t *coinbase;
@@ -88,7 +88,7 @@ static block_t *_add_block(blockchain_t *blockchain, block_t const *prev,
 
 		/* Update all unspent */
 		blockchain->unspent = update_unspent(block->transactions,
-			block->hash, blockchain->unspent);
+						     block->hash, blockchain->unspent);
 
 		llist_add_node(blockchain->chain, block, ADD_NODE_REAR);
 	}

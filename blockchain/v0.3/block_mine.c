@@ -1,9 +1,8 @@
 #include "blockchain.h"
 
 /**
- * block_mine - mine a block in order to insert it into a blockchain
- *
- * @block: pointer to the block to be mined
+ * block_mine - mines a Block in order to insert it in the Blockchain
+ * @block: the block to be mined
  */
 void block_mine(block_t *block)
 {
@@ -12,6 +11,6 @@ void block_mine(block_t *block)
 	do {
 		block->info.nonce = nonce;
 		block_hash(block, block->hash);
-		nonce += 1;
+		nonce++;
 	} while (!hash_matches_difficulty(block->hash, block->info.difficulty));
 }

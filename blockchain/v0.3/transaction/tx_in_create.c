@@ -1,27 +1,21 @@
 #include "transaction.h"
 
 /**
- * tx_in_create - create a transaction input
+ * tx_in_create - allocates and initializes a transaction input structure
+ * @unspent: address of unspent transaction output
+ *           to be converted to a transaction input
  *
- * @unspent: pointer to unspent transaction output to use as a an input
- *
- * Return: If memory allocation fails, return NULL.
- * Otherwise, return a pointer to the new transaction input structure.
+ * Return: pointer to created transaction input upon success, or NULL on fail
  */
 tx_in_t *tx_in_create(unspent_tx_out_t const *unspent)
 {
-	tx_in_t *tx_in = NULL;
+	tx_in_t *txIn = calloc(1, sizeof(tx_in_t));
 
-	if (!unspent)
+	if (!txIn)
 		return (NULL);
-	tx_in = calloc(1, sizeof(*tx_in));
-	if (!tx_in)
-		return (NULL);
-	memcpy(tx_in->block_hash, unspent->block_hash,
-		sizeof(tx_in->block_hash));
-	memcpy(tx_in->tx_id, unspent->tx_id,
-		sizeof(tx_in->tx_id));
-	memcpy(tx_in->tx_out_hash, unspent->out.hash,
-		sizeof(tx_in->tx_out_hash));
-	return (tx_in);
+	memcpy(txIn->block_hash, unspent->block_hash,
+	       sizeof(txIn->block_hash));
+	memcpy(txIn->tx_id, unspent->tx_id, sizeof(txIn->tx_id));
+	memcpy(txIn->tx_out_hash, unspent->out.hash, sizeof(txIn->tx_out_hash));
+	return (txIn);
 }
