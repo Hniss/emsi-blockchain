@@ -15,6 +15,7 @@ int hash_tx_ids(llist_node_t node, unsigned int idx, void *arg)
 	(void)idx;
 }
 
+
 /**
  * block_hash - computes hash of block
  * @block: pointer to block to hash
@@ -22,7 +23,7 @@ int hash_tx_ids(llist_node_t node, unsigned int idx, void *arg)
  * Return: pointer to buffer
  */
 uint8_t *block_hash(block_t const *block,
-					uint8_t hash_buf[SHA256_DIGEST_LENGTH])
+	uint8_t hash_buf[SHA256_DIGEST_LENGTH])
 {
 	size_t len0 = sizeof(block->info) + block->data.len, len;
 	int8_t *_buf, *buf;

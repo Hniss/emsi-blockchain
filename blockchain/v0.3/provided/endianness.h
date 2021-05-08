@@ -1,8 +1,8 @@
 #ifndef _ENDIANNESS_H_
-#define _ENDIANNESS_H_
+# define _ENDIANNESS_H_
 
-#include <stdint.h>
-#include <stddef.h>
+# include <stdint.h>
+# include <stddef.h>
 
 /*
  * # include <stdint.h>
@@ -25,7 +25,7 @@
  *				((value & 0x00000000000000FFULL) << 56))
  */
 
-#define SWAPENDIAN(value) _swap_endian((char *)(&value), sizeof(value))
+# define SWAPENDIAN(value)	_swap_endian((char *)(&value), sizeof(value))
 
 /**
  * union _endian_u - Used to test endianness
@@ -35,11 +35,11 @@
  */
 typedef union _endian_u
 {
-    uint32_t value;
-    uint8_t bytes[4];
+	uint32_t value;
+	uint8_t bytes[4];
 } _endian_t;
 
-uint8_t _get_endianness(void);
+uint8_t	_get_endianness(void);
 void _swap_endian(void *p, size_t size);
 
 #endif /* ! _ENDIANNESS_H_ */

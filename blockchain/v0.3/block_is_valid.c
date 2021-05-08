@@ -33,7 +33,7 @@ int validate_tx(llist_node_t node, unsigned int idx, void *arg)
  * Return: 0 if valid else 1 if invalid
  */
 int block_is_valid(block_t const *block, block_t const *prev_block,
-				   llist_t *all_unspent)
+	llist_t *all_unspent)
 {
 	uint8_t hash_buf[SHA256_DIGEST_LENGTH] = {0};
 	block_t const _genesis = GENESIS_BLOCK;

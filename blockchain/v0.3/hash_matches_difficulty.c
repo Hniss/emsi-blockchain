@@ -24,14 +24,13 @@ uint32_t get_difficulty(uint8_t const hash[SHA256_DIGEST_LENGTH])
 }
 
 /**
- * hash_matches_difficulty - hash_matches_difficulty checks whether a given
- * hash matches a given difficulty
- * @hash: is the hash to check
- * @difficulty: is the minimum difficulty the hash should match
- * Return: 1 if the difficulty is respected or 0 otherwise
+ * hash_matches_difficulty - determines if hash matches difficulty
+ * @hash: hash buffer
+ * @difficulty: difficulty to match
+ * Return: 1 if matches else 0
  */
 int hash_matches_difficulty(uint8_t const hash[SHA256_DIGEST_LENGTH],
-							uint32_t difficulty)
+	uint32_t difficulty)
 {
 	if (!hash)
 		return (0);

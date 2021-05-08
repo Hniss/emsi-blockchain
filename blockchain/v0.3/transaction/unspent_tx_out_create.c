@@ -1,33 +1,22 @@
 #include "transaction.h"
 
 /**
- * unspent_tx_out_create - allocates and initializes an unspent
- * transaction output structure
- * @block_hash: contains the hash of the Block where
- * the referenced transaction output is located
- * @tx_id: contains the hash of a transaction in the Block block_hash,
- * where the referenced transaction output is located
- * @out: points to the referenced transaction output
- * Return:n a pointer to the created unspent transaction output upon success,
- * or NULL upon failure
+ * unspent_tx_out_create - creates unspent transaction struct
+ * @block_hash: hash of block containing transaction
+ * @tx_id: hash of transaction in block
+ * @out: address of transaction output to be copied
+ * Return: new unspent transaction struct
  */
 unspent_tx_out_t *unspent_tx_out_create(
 	uint8_t block_hash[SHA256_DIGEST_LENGTH],
-	uint8_t tx_id[SHA256_DIGEST_LENGTH],
-	tx_out_t const *out)
+	uint8_t tx_id[SHA256_DIGEST_LENGTH], tx_out_t const *out)
 {
-	unspent_tx_out_t *new_UTXO_output = NULL;
+	unspent_tx_out_t *utx = calloc(1, sizeof(*utx));
 
-	new_UTXO_output = calloc(1, sizeof(unspent_tx_out_t));
-	if (new_UTXO_output == NULL)
-	{
+	if (!utx)
 		return (NULL);
-	}
-
-	memcpy(new_UTXO_output->block_hash, block_hash,
-		   sizeof(new_UTXO_output->block_hash));
-	memcpy(new_UTXO_output->tx_id, tx_id, sizeof(new_UTXO_output->tx_id));
-	memcpy(&new_UTXO_output->out, out, sizeof(new_UTXO_output->out));
-
-	return (new_UTXO_output);
+	memcpy(utx->block_hash, block_hash, sizeof(utx->block_hash));
+	memcpy(utx->tx_id, tx_id, sizeof(utx->tx_id));
+	memcpy(&utx->out, out, sizeof(utx->out));
+	return (utx);
 }

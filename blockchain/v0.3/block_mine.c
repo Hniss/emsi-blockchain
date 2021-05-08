@@ -1,8 +1,8 @@
 #include "blockchain.h"
 
 /**
- * block_mine - block_mine mines a new block inside the blockchain
- * @block: is the block to be mined
+ * block_mine - mines a block with requisite difficulty
+ * @block: pointer to block to mine
  */
 void block_mine(block_t *block)
 {

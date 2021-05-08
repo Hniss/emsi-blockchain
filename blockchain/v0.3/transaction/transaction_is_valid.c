@@ -75,7 +75,7 @@ int check_outputs(llist_node_t node, unsigned int idx, void *arg)
  * Return: 1 if valid else 0
  */
 int transaction_is_valid(transaction_t const *transaction,
-						 llist_t *all_unspent)
+	llist_t *all_unspent)
 {
 	uint8_t hash_buf[SHA256_DIGEST_LENGTH];
 	validation_vistor_t visitor = {0};
