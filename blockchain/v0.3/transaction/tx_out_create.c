@@ -1,26 +1,29 @@
 #include "transaction.h"
 
 /**
-* tx_out_create - creates a transaction output
-* @amount: amount of the transaction
-* @pub: public key of a transaction receiver
-* Return: transaction output
-*/
+ * tx_out_create - creates a new transaction output structure
+ * @amount: the transaction amount
+ * @pub: public key of receiver
+ * Return: pointer to new structure or NULL
+ */
 tx_out_t *tx_out_create(uint32_t amount, uint8_t const pub[EC_PUB_LEN])
 {
-	tx_out_t *tr;
+	tx_out_t *new_tx_output = NULL;
 
-	if (!pub)
-		return (NULL);
-	tr = calloc(1, sizeof(*tr));
-	if (!tr)
-		return (NULL);
-	tr->amount = amount;
-	memcpy(tr->pub, pub, EC_PUB_LEN);
-	if (!sha256((const int8_t *)tr, TX_OUT_HASH_LEN, tr->hash))
+	new_tx_output = calloc(1, sizeof(tx_out_t));
+
+	if (new_tx_output == NULL)
 	{
-		free(tr);
 		return (NULL);
 	}
-	return (tr);
+	new_tx_output->amount = amount;
+	memcpy(new_tx_output->pub, pub, sizeof(new_tx_output->pub));
+	if (!sha256((int8_t const *)new_tx_output,
+				sizeof(new_tx_output->amount) + sizeof(new_tx_output->pub),
+				new_tx_output->hash))
+	{
+		free(new_tx_output);
+		return (NULL);
+	}
+	return (new_tx_output);
 }

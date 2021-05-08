@@ -7,7 +7,7 @@
  */
 uint8_t _get_endianness(void)
 {
-	_endian_t order = { 1 };
+	_endian_t order = {1};
 
 	if (order.bytes[0] == 1)
 		return (1); /* Little endian */
