@@ -1,4 +1,3 @@
-
 #include "transaction.h"
 
 /**
