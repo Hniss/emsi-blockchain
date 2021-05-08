@@ -72,7 +72,7 @@ llist_t *deserialize_blocks(int fd, uint32_t size, uint8_t endianness)
 		if (read(fd, &(block->data.len), 4) != 4)
 			return (CLEAN_UP_BLOCKS, NULL);
 		CHECK_ENDIAN(block->data.len);
-		if (read(fd, block->data.buffer, block->data.len) != block->data.len)
+		if (read(fd, block->data.buffer, block->data.len) != (int)block->data.len)
 			return (CLEAN_UP_BLOCKS, NULL);
 		if (read(fd, block->hash, SHA256_DIGEST_LENGTH) !=
 			SHA256_DIGEST_LENGTH)
